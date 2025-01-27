@@ -1,0 +1,47 @@
+import React, { useState } from 'react';
+
+const Captcha = () => {
+  const [captcha, setCaptcha] = useState('');
+  const [userInput, setUserInput] = useState('');
+
+  const generateCaptcha = () => {
+    const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let captchaText = '';
+    for (let i = 0; i < 6; i++) {
+      captchaText += chars[Math.floor(Math.random() * chars.length)];
+    }
+    setCaptcha(captchaText);
+  };
+
+  const handleInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    if (userInput === captcha) {
+      alert('CAPTCHA verification successful!');
+    } else {
+      alert('Incorrect CAPTCHA, please try again.');
+      generateCaptcha();
+      setUserInput('');
+    }
+  };
+
+  React.useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  return (
+    <div>
+      <form onSubmit={handleFormSubmit}>
+        <p>Enter the following CAPTCHA to verify:</p>
+        <div>{captcha}</div>
+        <input type="text" value={userInput} onChange={handleInputChange} required />
+        <button type="submit">Verify</button>
+      </form>
+    </div>
+  );
+};
+
+export default Captcha;
